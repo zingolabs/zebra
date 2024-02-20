@@ -65,6 +65,8 @@ pub enum Network {
 
 pub trait AllParameters: zcash_primitives::consensus::Parameters {
     fn height_for_first_halving(&self) -> Height;
+    fn genesis_hash(&self) -> crate::block::Hash;
+    fn magic_value(&self) -> zebra_network::protocol::external::types::Magic;
 }
 impl AllParameters for Network {
     fn height_for_first_halving(&self) -> Height {
@@ -74,6 +76,17 @@ impl AllParameters for Network {
                 .expect("canopy activation height should be available"),
             Network::Testnet => FIRST_HALVING_TESTNET,
         }
+    }
+
+    fn genesis_hash(&self) -> crate::block::Hash {
+        match self {
+            // zcash-cli getblockhash 0
+            Network::Mainnet => "00040fe8ec8471911baa1db1266ea15dd06b4a8a5c453883c000b031973dce08",
+            // zcash-cli -testnet getblockhash 0
+            Network::Testnet => "05a60a92d99d85997cce3b87616c089f6124d7342af37106edc76126334a2c38",
+        }
+        .parse()
+        .expect("hard-coded hash parses")
     }
 }
 impl zcash_primitives::consensus::Parameters for Network {
