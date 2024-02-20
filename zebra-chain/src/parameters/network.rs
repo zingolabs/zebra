@@ -70,7 +70,7 @@ impl AllParameters for Network {
     fn height_for_first_halving(&self) -> Height {
         match self {
             Network::Mainnet => Canopy
-                .activation_height(network)
+                .activation_height(*self)
                 .expect("canopy activation height should be available"),
             Network::Testnet => FIRST_HALVING_TESTNET,
         }
@@ -85,7 +85,10 @@ impl zcash_primitives::consensus::Parameters for Network {
     }
 
     fn coin_type(&self) -> u32 {
-        todo!()
+        match self {
+            Network::Mainnet => zcash_primitives::constants::mainnet::COIN_TYPE,
+            Network::Testnet => zcash_primitives::constants::testnet::COIN_TYPE,
+        }
     }
 
     fn address_network(&self) -> Option<zcash_address::Network> {
