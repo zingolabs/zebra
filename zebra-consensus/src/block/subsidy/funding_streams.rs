@@ -56,12 +56,7 @@ pub fn height_for_first_halving(network: Network) -> Height {
     // First halving on Mainnet is at Canopy
     // while in Testnet is at block constant height of `1_116_000`
     // https://zips.z.cash/protocol/protocol.pdf#zip214fundingstreams
-    match network {
-        Network::Mainnet => Canopy
-            .activation_height(network)
-            .expect("canopy activation height should be available"),
-        Network::Testnet => FIRST_HALVING_TESTNET,
-    }
+    network.height_for_first_halving()
 }
 
 /// Returns the address change period

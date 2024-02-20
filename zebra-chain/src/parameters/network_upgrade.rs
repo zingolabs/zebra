@@ -241,6 +241,9 @@ impl NetworkUpgrade {
     /// When the environment variable TEST_FAKE_ACTIVATION_HEIGHTS is set
     /// and it's a test build, this returns a list of fake activation heights
     /// used by some tests.
+    #[deprecated(
+        note = "This functionality is handled by zcash_primitives::consensus::Parameters::activation_height"
+    )]
     pub fn activation_list(network: Network) -> BTreeMap<block::Height, NetworkUpgrade> {
         let (mainnet_heights, testnet_heights) = {
             #[cfg(not(feature = "zebra-test"))]

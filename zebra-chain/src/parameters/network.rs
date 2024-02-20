@@ -63,6 +63,55 @@ pub enum Network {
     Testnet,
 }
 
+pub trait AllParameters: zcash_primitives::consensus::Parameters {
+    fn height_for_first_halving(&self) -> Height;
+}
+impl AllParameters for Network {
+    fn height_for_first_halving(&self) -> Height {
+        match self {
+            Network::Mainnet => Canopy
+                .activation_height(network)
+                .expect("canopy activation height should be available"),
+            Network::Testnet => FIRST_HALVING_TESTNET,
+        }
+    }
+}
+impl zcash_primitives::consensus::Parameters for Network {
+    fn activation_height(
+        &self,
+        nu: zcash_primitives::consensus::NetworkUpgrade,
+    ) -> Option<zcash_primitives::consensus::BlockHeight> {
+        todo!()
+    }
+
+    fn coin_type(&self) -> u32 {
+        todo!()
+    }
+
+    fn address_network(&self) -> Option<zcash_address::Network> {
+        todo!()
+    }
+
+    fn hrp_sapling_extended_spending_key(&self) -> &str {
+        todo!()
+    }
+
+    fn hrp_sapling_extended_full_viewing_key(&self) -> &str {
+        todo!()
+    }
+
+    fn hrp_sapling_payment_address(&self) -> &str {
+        todo!()
+    }
+
+    fn b58_pubkey_address_prefix(&self) -> [u8; 2] {
+        todo!()
+    }
+
+    fn b58_script_address_prefix(&self) -> [u8; 2] {
+        todo!()
+    }
+}
 impl From<Network> for &'static str {
     fn from(network: Network) -> &'static str {
         match network {
