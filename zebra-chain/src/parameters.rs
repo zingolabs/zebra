@@ -13,7 +13,7 @@
 //! `Network` and `block::Height`.
 
 mod genesis;
-mod network;
+pub mod network;
 mod network_upgrade;
 mod transaction;
 

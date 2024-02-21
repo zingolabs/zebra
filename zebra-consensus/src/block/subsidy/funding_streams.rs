@@ -7,7 +7,7 @@ use std::{collections::HashMap, str::FromStr};
 use zebra_chain::{
     amount::{Amount, Error, NonNegative},
     block::Height,
-    parameters::{Network, NetworkUpgrade::*},
+    parameters::{network::AllParameters as _, Network, NetworkUpgrade::*},
     transaction::Transaction,
     transparent::{self, Script},
 };

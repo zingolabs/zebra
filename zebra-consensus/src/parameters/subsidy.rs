@@ -43,12 +43,6 @@ pub const PRE_BLOSSOM_HALVING_INTERVAL: HeightDiff = 840_000;
 pub const POST_BLOSSOM_HALVING_INTERVAL: HeightDiff =
     PRE_BLOSSOM_HALVING_INTERVAL * (BLOSSOM_POW_TARGET_SPACING_RATIO as HeightDiff);
 
-/// The first halving height in the testnet is at block height `1_116_000`
-/// as specified in [protocol specification §7.10.1][7.10.1]
-///
-/// [7.10.1]: https://zips.z.cash/protocol/protocol.pdf#zip214fundingstreams
-pub const FIRST_HALVING_TESTNET: Height = Height(1_116_000);
-
 /// The funding stream receiver categories.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum FundingStreamReceiver {

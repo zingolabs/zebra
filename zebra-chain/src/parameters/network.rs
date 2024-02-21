@@ -15,6 +15,8 @@ use proptest_derive::Arbitrary;
 #[cfg(test)]
 mod tests;
 
+pub mod constants;
+
 /// The ZIP-212 grace period length after the Canopy activation height.
 ///
 /// # Consensus
@@ -74,15 +76,6 @@ impl fmt::Debug for Magic {
     }
 }
 
-impl From<Network> for Magic {
-    /// Get the magic value associated to this `Network`.
-    fn from(network: Network) -> Self {
-        match network {
-            Network::Mainnet => magics::MAINNET,
-            Network::Testnet => magics::TESTNET,
-        }
-    }
-}
 /// Magic numbers used to identify different Zcash networks.
 pub mod magics {
     use super::*;
@@ -102,7 +95,7 @@ impl AllParameters for Network {
             Network::Mainnet => Canopy
                 .activation_height(*self)
                 .expect("canopy activation height should be available"),
-            Network::Testnet => FIRST_HALVING_TESTNET,
+            Network::Testnet => constants::FIRST_HALVING_TESTNET,
         }
     }
 
@@ -115,6 +108,13 @@ impl AllParameters for Network {
         }
         .parse()
         .expect("hard-coded hash parses")
+    }
+
+    fn magic_value(&self) -> Magic {
+        match self {
+            Network::Mainnet => magics::MAINNET,
+            Network::Testnet => magics::TESTNET,
+        }
     }
 }
 impl zcash_primitives::consensus::Parameters for Network {

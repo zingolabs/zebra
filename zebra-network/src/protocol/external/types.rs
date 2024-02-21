@@ -8,7 +8,9 @@ use zebra_chain::{
     },
 };
 
-use crate::constants::{self, magics};
+pub use zebra_chain::parameters::network::magics;
+
+use crate::constants;
 
 #[cfg(any(test, feature = "proptest-impl"))]
 use proptest_derive::Arbitrary;
@@ -144,9 +146,7 @@ mod proptest {
 
     use proptest::prelude::*;
 
-    use super::Magic;
-
-    use crate::constants::magics;
+    use zebra_chain::parameters::network::{magics, Magic};
 
     #[test]
     fn magic_debug() {
