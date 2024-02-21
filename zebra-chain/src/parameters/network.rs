@@ -63,10 +63,38 @@ pub enum Network {
     Testnet,
 }
 
+/// A magic number identifying the network.
+#[derive(Copy, Clone, Eq, PartialEq)]
+#[cfg_attr(any(test, feature = "proptest-impl"), derive(Arbitrary))]
+pub struct Magic(pub [u8; 4]);
+
+impl fmt::Debug for Magic {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_tuple("Magic").field(&hex::encode(self.0)).finish()
+    }
+}
+
+impl From<Network> for Magic {
+    /// Get the magic value associated to this `Network`.
+    fn from(network: Network) -> Self {
+        match network {
+            Network::Mainnet => magics::MAINNET,
+            Network::Testnet => magics::TESTNET,
+        }
+    }
+}
+/// Magic numbers used to identify different Zcash networks.
+pub mod magics {
+    use super::*;
+    /// The production mainnet.
+    pub const MAINNET: Magic = Magic([0x24, 0xe9, 0x27, 0x64]);
+    /// The testnet.
+    pub const TESTNET: Magic = Magic([0xfa, 0x1a, 0xf9, 0xbf]);
+}
 pub trait AllParameters: zcash_primitives::consensus::Parameters {
     fn height_for_first_halving(&self) -> Height;
     fn genesis_hash(&self) -> crate::block::Hash;
-    fn magic_value(&self) -> zebra_network::protocol::external::types::Magic;
+    fn magic_value(&self) -> Magic;
 }
 impl AllParameters for Network {
     fn height_for_first_halving(&self) -> Height {

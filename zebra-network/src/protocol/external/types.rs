@@ -13,27 +13,6 @@ use crate::constants::{self, magics};
 #[cfg(any(test, feature = "proptest-impl"))]
 use proptest_derive::Arbitrary;
 
-/// A magic number identifying the network.
-#[derive(Copy, Clone, Eq, PartialEq)]
-#[cfg_attr(any(test, feature = "proptest-impl"), derive(Arbitrary))]
-pub struct Magic(pub [u8; 4]);
-
-impl fmt::Debug for Magic {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_tuple("Magic").field(&hex::encode(self.0)).finish()
-    }
-}
-
-impl From<Network> for Magic {
-    /// Get the magic value associated to this `Network`.
-    fn from(network: Network) -> Self {
-        match network {
-            Network::Mainnet => magics::MAINNET,
-            Network::Testnet => magics::TESTNET,
-        }
-    }
-}
-
 /// A protocol version number.
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Version(pub u32);
