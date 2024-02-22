@@ -8,14 +8,13 @@ use crate::{
     block::{Height, HeightDiff},
     parameters::NetworkUpgrade::Canopy,
 };
+mod constants;
 
 #[cfg(any(test, feature = "proptest-impl"))]
 use proptest_derive::Arbitrary;
 
 #[cfg(test)]
 mod tests;
-
-pub mod constants;
 
 /// The ZIP-212 grace period length after the Canopy activation height.
 ///
