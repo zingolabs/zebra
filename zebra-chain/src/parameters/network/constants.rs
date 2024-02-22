@@ -4,4 +4,4 @@ use crate::block::Height;
 /// as specified in [protocol specification §7.10.1][7.10.1]
 ///
 /// [7.10.1]: https://zips.z.cash/protocol/protocol.pdf#zip214fundingstreams
-pub const FIRST_HALVING_TESTNET: Height = Height(1_116_000);
+pub(crate) const FIRST_HALVING_TESTNET: Height = Height(1_116_000);
