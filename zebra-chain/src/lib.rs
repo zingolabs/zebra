@@ -40,10 +40,10 @@ pub mod transparent;
 pub mod value_balance;
 pub mod work;
 
-#[cfg(any(test, feature = "proptest-impl"))]
+#[cfg(feature = "proptest-impl")]
 pub use block::LedgerState;
 
-#[cfg(any(test, feature = "proptest-impl"))]
+#[cfg(feature = "proptest-impl")]
 pub mod test_utils;
 
 /// Error type alias to make working with generic errors easier.
