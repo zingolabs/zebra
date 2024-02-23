@@ -1,3 +1,4 @@
+#![forbid(unsafe_code)]
 //! Network methods for fetching blockchain vectors.
 //!
 
