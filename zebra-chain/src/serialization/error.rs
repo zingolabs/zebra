@@ -52,18 +52,18 @@ pub enum SerializationError {
     BadTransactionBalance,
 
     ///  Invalid height for BLOCK_MAINNET_******_BYTES
-    #[error("invalid mainnet height requested, only 653_599 and 982_681 are available")]
+    #[error("invalid mainnet height {{0}} requested, only 653_599 and 982_681 are available")]
     NotACachedMainNetBlock(u32),
 
     ///  Invalid height for BLOCK_TESTNET_******_BYTES
-    #[error("invalid testnet height requested, only 583_999 and 925_483 are available")]
+    #[error("invalid testnet height {{0}} requested, only 583_999 and 925_483 are available")]
     NotACachedTestNetBlock(u32),
 
     /// Invalid sapling root mainnet bytes
-    #[error("invalid mainnet height requested, only 1_046_400 is available")]
+    #[error("invalid mainnet height {{0}} requested, only 1_046_400 is available")]
     NotACachedMainNetSaplingRootBytes(u32),
 
     /// Invalid sapling root testnet bytes
-    #[error("invalid testnet height requested, only 1_116_000 is available")]
+    #[error("invalid testnet height {{0}} requested, only 1_116_000 is available")]
     NotACachedTestNetSaplingRootBytes(u32),
 }
