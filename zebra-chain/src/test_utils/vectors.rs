@@ -45,7 +45,7 @@ impl Network {
         }
     }
 
-    ///
+    /// Return the map of heights to blocks
     pub fn get_block_map(&self) -> &BTreeMap<u32, &'static [u8]> {
         if self.is_mainnet() {
             &*zebra_test::vectors::MAINNET_BLOCKS
@@ -55,12 +55,13 @@ impl Network {
     }
 
     /// Returns genesis block for chain.
-    pub fn get_gen_block(&self) -> std::option::Option<&&[u8]> {
+    pub fn get_gen_block(&self) -> std::option::Option<&[u8]> {
         if self.is_mainnet() {
             MAINNET_BLOCKS.get(&0)
         } else {
             TESTNET_BLOCKS.get(&0)
         }
+        .cloned()
     }
 
     /// Returns block bytes
