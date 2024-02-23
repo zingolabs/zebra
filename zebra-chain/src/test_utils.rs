@@ -1,5 +1,3 @@
-//!Chain functionality for fetching test vectors.
+//!Chain functionality for fetching proptest vectors.
 //!
-
-#[cfg(feature = "proptest-impl")]
 mod vectors;
