@@ -94,7 +94,8 @@ impl Network {
         }
     }
 
-    /// Returns BTreemap of blockchain.
+    /// Returns BTreemap of blockchain, keys are heights, and values are blocks.
+    /// Why not represent as a vec?
     pub fn get_blockchain_map(&self) -> &BTreeMap<u32, &'static [u8]> {
         if self.is_mainnet() {
             &CONTINUOUS_MAINNET_BLOCKS
