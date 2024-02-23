@@ -74,13 +74,13 @@ impl Network {
             match main_bytes {
                 653_599 => BLOCK_MAINNET_653599_BYTES.zcash_deserialize_into(),
                 982_681 => BLOCK_MAINNET_982681_BYTES.zcash_deserialize_into(),
-                _ => Err(SerializationError::UnsupportedVersion(main_bytes)),
+                _ => Err(SerializationError::NotACachedMainNetBlock(main_bytes)),
             }
         } else {
             match test_bytes {
                 583_999 => BLOCK_TESTNET_583999_BYTES.zcash_deserialize_into(),
                 925_483 => BLOCK_TESTNET_925483_BYTES.zcash_deserialize_into(),
-                _ => Err(SerializationError::UnsupportedVersion(test_bytes)),
+                _ => Err(SerializationError::NotACachedTestNetBlock(test_bytes)),
             }
         }
     }
@@ -140,11 +140,13 @@ impl Network {
     ) -> Result<(&[u8], [u8; 32]), SerializationError> {
         if self.is_mainnet() {
             match main_bytes {
-                1_046_400_ => Ok((
+                1_046_400 => Ok((
                     &BLOCK_MAINNET_1046400_BYTES[..],
                     *SAPLING_FINAL_ROOT_MAINNET_1046400_BYTES,
                 )),
-                _ => Err(SerializationError::UnsupportedVersion(main_bytes)),
+                _ => Err(SerializationError::NotACachedMainNetSaplingRootBytes(
+                    main_bytes,
+                )),
             }
         } else {
             match test_bytes {
@@ -152,7 +154,9 @@ impl Network {
                     &BLOCK_TESTNET_1116000_BYTES[..],
                     *SAPLING_FINAL_ROOT_TESTNET_1116000_BYTES,
                 )),
-                _ => Err(SerializationError::UnsupportedVersion(test_bytes)),
+                _ => Err(SerializationError::NotACachedTestNetSaplingRootBytes(
+                    test_bytes,
+                )),
             }
         }
     }
