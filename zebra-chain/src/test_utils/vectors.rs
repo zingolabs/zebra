@@ -19,11 +19,21 @@ use zebra_test::vectors::{
     TESTNET_BLOCKS, TESTNET_FINAL_SAPLING_ROOTS, TESTNET_FINAL_SPROUT_ROOTS,
 };
 
-/// Network methods for fetching blockchain vectors.
+/// Network methods for fetching blockchain state.
 impl Network {
     /// Returns true if network is of type Mainnet.
     pub fn is_mainnet(&self) -> bool {
-        matches!(self, Network::Mainnet)
+        match self {
+            Network::Mainnet => true,
+            Network::Testnet => false,
+        }
+    }
+    /// Returns true if network is type default Testnet.
+    pub fn is_default_testnet(&self) -> bool {
+        match self {
+            Network::Mainnet => false,
+            Network::Testnet => true,
+        }
     }
 
     /// Returns iterator over blocks.
