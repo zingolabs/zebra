@@ -189,3 +189,72 @@ impl Network {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_is_mainnet() {
+        let mainnet = Network::Mainnet;
+        assert!(
+            mainnet.is_mainnet(),
+            "Mainnet should return true for is_mainnet"
+        );
+
+        let testnet = Network::Testnet;
+        assert!(
+            !testnet.is_mainnet(),
+            "Testnet should return false for is_mainnet"
+        );
+    }
+
+    #[test]
+    fn test_is_default_testnet() {
+        let mainnet = Network::Mainnet;
+        assert!(
+            !mainnet.is_default_testnet(),
+            "Mainnet should return false for is_testnet"
+        );
+
+        let testnet = Network::Testnet;
+        assert!(
+            testnet.is_default_testnet(),
+            "Testnet should return true for is_testnet"
+        );
+    }
+
+    #[test]
+    fn get_block_bytes_invalid_height() {
+        let network = Network::Mainnet;
+        let result = network.get_block_bytes(0, 0); // Assuming 0 is not a valid input for either.
+        assert!(matches!(
+            result,
+            Err(SerializationError::NotACachedMainNetBlock(0))
+        ));
+
+        let network = Network::Testnet;
+        let result = network.get_block_bytes(0, 0); // Assuming 0 is not a valid input for either.
+        assert!(matches!(
+            result,
+            Err(SerializationError::NotACachedTestNetBlock(0))
+        ));
+    }
+
+    #[test]
+    fn get_block_sapling_roots_bytes_invalid_height() {
+        let network = Network::Mainnet;
+        let result = network.get_block_sapling_roots_bytes(0, 0); // Assuming 0 is not a valid input.
+        assert!(matches!(
+            result,
+            Err(SerializationError::NotACachedMainNetSaplingRootBytes(0))
+        ));
+
+        let network = Network::Testnet;
+        let result = network.get_block_sapling_roots_bytes(0, 0); // Assuming 0 is not a valid input.
+        assert!(matches!(
+            result,
+            Err(SerializationError::NotACachedTestNetSaplingRootBytes(0))
+        ));
+    }
+}
