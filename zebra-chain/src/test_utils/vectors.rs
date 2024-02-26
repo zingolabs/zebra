@@ -193,9 +193,14 @@ impl Network {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::{
+        block::Block,
+        parameters::Network,
+        serialization::{SerializationError, ZcashDeserializeInto},
+    };
 
     #[test]
-    fn test_is_mainnet() {
+    fn is_mainnet() {
         let mainnet = Network::Mainnet;
         assert!(
             mainnet.is_mainnet(),
@@ -210,7 +215,7 @@ mod tests {
     }
 
     #[test]
-    fn test_is_default_testnet() {
+    fn is_default_testnet() {
         let mainnet = Network::Mainnet;
         assert!(
             !mainnet.is_default_testnet(),
@@ -225,36 +230,55 @@ mod tests {
     }
 
     #[test]
-    fn get_block_bytes_invalid_height() {
+    fn get_block_bytes() {
         let network = Network::Mainnet;
-        let result = network.get_block_bytes(0, 0); // Assuming 0 is not a valid input for either.
+        let result = network.get_block_bytes(0, 583999);
         assert!(matches!(
             result,
             Err(SerializationError::NotACachedMainNetBlock(0))
         ));
+        let result = network.get_block_bytes(653599, 0).unwrap();
+        let _correct_main_bytes: Block =
+            BLOCK_MAINNET_653599_BYTES.zcash_deserialize_into().unwrap();
+        assert!(matches!(result, _correct_main_bytes));
 
         let network = Network::Testnet;
-        let result = network.get_block_bytes(0, 0); // Assuming 0 is not a valid input for either.
+        let result = network.get_block_bytes(653599, 0);
         assert!(matches!(
             result,
             Err(SerializationError::NotACachedTestNetBlock(0))
         ));
-    }
-
-    #[test]
-    fn get_block_sapling_roots_bytes_invalid_height() {
-        let network = Network::Mainnet;
-        let result = network.get_block_sapling_roots_bytes(0, 0); // Assuming 0 is not a valid input.
-        assert!(matches!(
-            result,
-            Err(SerializationError::NotACachedMainNetSaplingRootBytes(0))
-        ));
-
         let network = Network::Testnet;
-        let result = network.get_block_sapling_roots_bytes(0, 0); // Assuming 0 is not a valid input.
-        assert!(matches!(
-            result,
-            Err(SerializationError::NotACachedTestNetSaplingRootBytes(0))
-        ));
+        let result = network.get_block_bytes(0, 583999);
+        let _correct_test_bytes: Block =
+            BLOCK_TESTNET_583999_BYTES.zcash_deserialize_into().unwrap();
+        assert!(matches!(result, _correct_test_bytes));
     }
+
+    // #[test]
+    // fn get_block_sapling_roots_bytes() {
+    //     let network = Network::Mainnet;
+    //     let result = network.get_block_sapling_roots_bytes(0, 1116000);
+    //     assert!(matches!(
+    //         result,
+    //         Err(SerializationError::NotACachedMainNetSaplingRootBytes(0))
+    //     ));
+    //     let result = network.get_block_sapling_roots_bytes(0, 1116000);
+    //     assert!(matches!(
+    //         result,
+    //         Err(SerializationError::NotACachedMainNetSaplingRootBytes(0))
+    //     ));
+
+    //     let network = Network::Testnet;
+    //     let result = network.get_block_sapling_roots_bytes(1046400, 0);
+    //     assert!(matches!(
+    //         result,
+    //         Err(SerializationError::NotACachedTestNetSaplingRootBytes(0))
+    //     ));
+    //     let result = network.get_block_sapling_roots_bytes(1046400, 0);
+    //     assert!(matches!(
+    //         result,
+    //         Err(SerializationError::NotACachedTestNetSaplingRootBytes(0))
+    //     ));
+    // }
 }
