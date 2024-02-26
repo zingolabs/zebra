@@ -255,30 +255,32 @@ mod tests {
         assert!(matches!(result, _correct_test_bytes));
     }
 
-    // #[test]
-    // fn get_block_sapling_roots_bytes() {
-    //     let network = Network::Mainnet;
-    //     let result = network.get_block_sapling_roots_bytes(0, 1116000);
-    //     assert!(matches!(
-    //         result,
-    //         Err(SerializationError::NotACachedMainNetSaplingRootBytes(0))
-    //     ));
-    //     let result = network.get_block_sapling_roots_bytes(0, 1116000);
-    //     assert!(matches!(
-    //         result,
-    //         Err(SerializationError::NotACachedMainNetSaplingRootBytes(0))
-    //     ));
+    #[test]
+    fn get_block_sapling_roots_bytes() {
+        let network = Network::Mainnet;
+        let result = network.get_block_sapling_roots_bytes(0, 1116000);
+        assert!(matches!(
+            result,
+            Err(SerializationError::NotACachedMainNetSaplingRootBytes(0))
+        ));
+        let result = network.get_block_sapling_roots_bytes(1046400, 0).unwrap();
+        let _correct_main_result: (&[u8], [u8; 32]) = (
+            &BLOCK_MAINNET_1046400_BYTES[..],
+            *SAPLING_FINAL_ROOT_MAINNET_1046400_BYTES,
+        );
+        assert!(matches!(result, _correct_main_result));
 
-    //     let network = Network::Testnet;
-    //     let result = network.get_block_sapling_roots_bytes(1046400, 0);
-    //     assert!(matches!(
-    //         result,
-    //         Err(SerializationError::NotACachedTestNetSaplingRootBytes(0))
-    //     ));
-    //     let result = network.get_block_sapling_roots_bytes(1046400, 0);
-    //     assert!(matches!(
-    //         result,
-    //         Err(SerializationError::NotACachedTestNetSaplingRootBytes(0))
-    //     ));
-    // }
+        let network = Network::Testnet;
+        let result = network.get_block_sapling_roots_bytes(1046400, 0);
+        assert!(matches!(
+            result,
+            Err(SerializationError::NotACachedTestNetSaplingRootBytes(0))
+        ));
+        let result = network.get_block_sapling_roots_bytes(0, 1116000).unwrap();
+        let _correct_test_result: (&[u8], [u8; 32]) = (
+            &BLOCK_TESTNET_1116000_BYTES[..],
+            *SAPLING_FINAL_ROOT_TESTNET_1116000_BYTES,
+        );
+        assert!(matches!(result, _correct_test_result));
+    }
 }
