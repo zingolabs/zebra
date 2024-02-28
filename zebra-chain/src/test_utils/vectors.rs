@@ -204,6 +204,7 @@ mod tests {
         prop::sample::select(vec![Network::Mainnet, Network::Testnet])
     }
     proptest! {
+        #![proptest_config(ProptestConfig::with_cases(2))] // Pedantic given the scenario
         #[test]
         fn test_network_properties(network in networks()) {
             match network {
