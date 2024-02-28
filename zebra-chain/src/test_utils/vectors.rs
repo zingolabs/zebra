@@ -210,8 +210,12 @@ mod vector_tests {
             match network {
                 Network::Mainnet => {
                     assert!(network.get_block_iter().zip(crate::test_utils::vectors::MAINNET_BLOCKS.iter()).all(|(a, b)| a == b));
+                    assert_eq!(*network.get_block_map(), *crate::test_utils::vectors::MAINNET_BLOCKS);
                 },
-                Network::Testnet => {}
+                Network::Testnet => {
+                    assert!(network.get_block_iter().zip(crate::test_utils::vectors::TESTNET_BLOCKS.iter()).all(|(a, b)| a == b));
+                    assert_eq!(*network.get_block_map(), *crate::test_utils::vectors::TESTNET_BLOCKS);
+                }
             }
         }
         #[test]
