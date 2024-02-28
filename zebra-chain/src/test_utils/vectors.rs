@@ -200,9 +200,12 @@ mod tests {
     };
     use proptest::prelude::*;
 
+    fn networks() -> impl Strategy<Value = crate::parameters::Network> {
+        prop::sample::select(vec![Network::Mainnet, Network::Testnet])
+    }
     proptest! {
         #[test]
-        fn test_network_properties(network in prop::sample::select(vec![Network::Mainnet, Network::Testnet])) {
+        fn test_network_properties(network in networks()) {
             match network {
                 Network::Mainnet => {
                     prop_assert!(network.is_mainnet());
