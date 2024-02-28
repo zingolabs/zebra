@@ -208,7 +208,9 @@ mod vector_tests {
         #[test]
         fn get_block_tests(network in networks()) {
             match network {
-                Network::Mainnet => {},
+                Network::Mainnet => {
+                    assert!(network.get_block_iter().zip(crate::test_utils::vectors::MAINNET_BLOCKS.iter()).all(|(a, b)| a == b));
+                },
                 Network::Testnet => {}
             }
         }
