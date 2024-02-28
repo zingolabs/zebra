@@ -206,6 +206,13 @@ mod vector_tests {
     proptest! {
         #![proptest_config(ProptestConfig::with_cases(2))] // Pedantic given the scenario
         #[test]
+        fn get_block_tests(network in networks()) {
+            match network {
+                Network::Mainnet => {},
+                Network::Testnet => {}
+            }
+        }
+        #[test]
         fn test_network_properties(network in networks()) {
             match network {
                 Network::Mainnet => {
@@ -272,10 +279,5 @@ mod vector_tests {
                 }
             }
         }
-    }
-
-    #[test]
-    fn get_block_tests() {
-        let _mainnet = Network::Mainnet;
     }
 }
