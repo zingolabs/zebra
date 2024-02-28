@@ -52,6 +52,7 @@ pub enum SerializationError {
     BadTransactionBalance,
 
     ///  Invalid BLOCK_MAINNET_******_BYTES vector ID given to vector fetcher
+    #[cfg(any(test, feature = "proptest-impl"))]
     #[error("invalid mainnet / testnet bytes id given to vector fetcher")]
     UnsupportedVersion(u32),
 }
