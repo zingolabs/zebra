@@ -362,7 +362,7 @@ fn genesis_block_difficulty_for_network(network: Network) -> Result<(), Report> 
     let block = network.get_gen_block();
 
     let block = block.expect("test vectors contain the genesis block");
-    let block = Block::zcash_deserialize(&block[..]).expect("block test vector should deserialize");
+    let block = Block::zcash_deserialize(block).expect("block test vector should deserialize");
     let hash = block.hash();
 
     /// SPANDOC: Calculate the threshold for the genesis block {?network}
