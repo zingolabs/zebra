@@ -191,7 +191,7 @@ impl Network {
 }
 
 #[cfg(test)]
-mod tests {
+mod vector_tests {
     use super::*;
     use crate::{
         block::Block,
@@ -244,39 +244,39 @@ mod tests {
             }
         }
 
+
+        #[test]
+        fn get_block_sapling_roots_bytes(network in networks()) {
+            let mainnet = Network::Mainnet;
+            let testnet = Network::Testnet;
+            let result = mainnet.get_block_sapling_roots_bytes(0, 1116000);
+            matches!(
+                result,
+                Err(SerializationError::NotACachedMainNetSaplingRootBytes(0))
+            );
+            let result = mainnet.get_block_sapling_roots_bytes(1046400, 0).unwrap();
+            let _correct_main_result: (&[u8], [u8; 32]) = (
+                &BLOCK_MAINNET_1046400_BYTES[..],
+                *SAPLING_FINAL_ROOT_MAINNET_1046400_BYTES,
+            );
+            matches!(result, _correct_main_result);
+
+            let result = testnet.get_block_sapling_roots_bytes(1046400, 0);
+            matches!(
+                result,
+                Err(SerializationError::NotACachedTestNetSaplingRootBytes(0))
+            );
+            let result = testnet.get_block_sapling_roots_bytes(0, 1116000).unwrap();
+            let _correct_test_result: (&[u8], [u8; 32]) = (
+                &BLOCK_TESTNET_1116000_BYTES[..],
+                *SAPLING_FINAL_ROOT_TESTNET_1116000_BYTES,
+            );
+            matches!(result, _correct_test_result);
+        }
     }
 
     #[test]
     fn get_block_tests() {
         let _mainnet = Network::Mainnet;
-    }
-
-    #[test]
-    fn get_block_sapling_roots_bytes() {
-        let mainnet = Network::Mainnet;
-        let testnet = Network::Testnet;
-        let result = mainnet.get_block_sapling_roots_bytes(0, 1116000);
-        assert!(matches!(
-            result,
-            Err(SerializationError::NotACachedMainNetSaplingRootBytes(0))
-        ));
-        let result = mainnet.get_block_sapling_roots_bytes(1046400, 0).unwrap();
-        let _correct_main_result: (&[u8], [u8; 32]) = (
-            &BLOCK_MAINNET_1046400_BYTES[..],
-            *SAPLING_FINAL_ROOT_MAINNET_1046400_BYTES,
-        );
-        assert!(matches!(result, _correct_main_result));
-
-        let result = testnet.get_block_sapling_roots_bytes(1046400, 0);
-        assert!(matches!(
-            result,
-            Err(SerializationError::NotACachedTestNetSaplingRootBytes(0))
-        ));
-        let result = testnet.get_block_sapling_roots_bytes(0, 1116000).unwrap();
-        let _correct_test_result: (&[u8], [u8; 32]) = (
-            &BLOCK_TESTNET_1116000_BYTES[..],
-            *SAPLING_FINAL_ROOT_TESTNET_1116000_BYTES,
-        );
-        assert!(matches!(result, _correct_test_result));
     }
 }
