@@ -198,40 +198,27 @@ mod tests {
         parameters::Network,
         serialization::{SerializationError, ZcashDeserializeInto},
     };
+    use proptest::prelude::*;
 
-    #[test]
-    fn is_mainnet() {
-        let mainnet = Network::Mainnet;
-        let testnet = Network::Testnet;
-
-        assert!(
-            mainnet.is_mainnet(),
-            "Mainnet should return true for is_mainnet"
-        );
-        assert!(
-            !testnet.is_mainnet(),
-            "Testnet should return false for is_mainnet"
-        );
-    }
-
-    #[test]
-    fn is_default_testnet() {
-        let mainnet = Network::Mainnet;
-        let testnet = Network::Testnet;
-
-        assert!(
-            !mainnet.is_default_testnet(),
-            "Mainnet should return false for is_testnet"
-        );
-        assert!(
-            testnet.is_default_testnet(),
-            "Testnet should return true for is_testnet"
-        );
+    proptest! {
+        #[test]
+        fn test_network_properties(network in prop::sample::select(vec![Network::Mainnet, Network::Testnet])) {
+            match network {
+                Network::Mainnet => {
+                    prop_assert!(network.is_mainnet());
+                    prop_assert!(!network.is_default_testnet(), "Mainnet should not be default testnet");
+                },
+                Network::Testnet => {
+                    prop_assert!(!network.is_mainnet(), "Testnet should not return true for is_mainnet");
+                    prop_assert!(network.is_default_testnet());
+                },
+            }
+        }
     }
 
     #[test]
     fn get_block_tests() {
-        let mainnet = Network::Mainnet;
+        let _mainnet = Network::Mainnet;
     }
 
     #[test]
