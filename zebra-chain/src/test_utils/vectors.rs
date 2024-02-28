@@ -217,37 +217,37 @@ mod tests {
                 },
             }
         }
+        #[test]
+        fn get_block_bytes(network in networks()) {
+            match network {
+                Network::Mainnet => {
+                    matches!(
+                        network.get_block_bytes(0, 583999),
+                        Err(SerializationError::NotACachedMainNetBlock(0)));
+                    let result = network.get_block_bytes(653599, 0).unwrap();
+                    let _correct_main_bytes: Block =
+                        BLOCK_MAINNET_653599_BYTES.zcash_deserialize_into().unwrap();
+                    assert!(matches!(result, _correct_main_bytes));
+                },
+                Network::Testnet => {
+                    let result = network.get_block_bytes(653599, 0);
+                    assert!(matches!(
+                        result,
+                        Err(SerializationError::NotACachedTestNetBlock(0))
+                    ));
+                    let result = network.get_block_bytes(0, 583999).unwrap();
+                    let _correct_test_bytes: Block =
+                        BLOCK_TESTNET_583999_BYTES.zcash_deserialize_into().unwrap();
+                    assert!(matches!(result, _correct_test_bytes));
+                }
+            }
+        }
+
     }
 
     #[test]
     fn get_block_tests() {
         let _mainnet = Network::Mainnet;
-    }
-
-    #[test]
-    fn get_block_bytes() {
-        let mainnet = Network::Mainnet;
-        let testnet = Network::Testnet;
-
-        let result = mainnet.get_block_bytes(0, 583999);
-        assert!(matches!(
-            result,
-            Err(SerializationError::NotACachedMainNetBlock(0))
-        ));
-        let result = mainnet.get_block_bytes(653599, 0).unwrap();
-        let _correct_main_bytes: Block =
-            BLOCK_MAINNET_653599_BYTES.zcash_deserialize_into().unwrap();
-        assert!(matches!(result, _correct_main_bytes));
-
-        let result = testnet.get_block_bytes(653599, 0);
-        assert!(matches!(
-            result,
-            Err(SerializationError::NotACachedTestNetBlock(0))
-        ));
-        let result = testnet.get_block_bytes(0, 583999).unwrap();
-        let _correct_test_bytes: Block =
-            BLOCK_TESTNET_583999_BYTES.zcash_deserialize_into().unwrap();
-        assert!(matches!(result, _correct_test_bytes));
     }
 
     #[test]
