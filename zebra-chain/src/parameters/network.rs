@@ -1,6 +1,6 @@
 //! Consensus parameters for each Zcash network.
 
-use std::{fmt, str::FromStr};
+use std::{fmt, str::FromStr, sync::Arc};
 
 use thiserror::Error;
 
@@ -60,7 +60,20 @@ pub enum Network {
     Mainnet,
 
     /// The oldest public test network.
-    Testnet,
+    Testnet(Arc<NetworkParameters>),
+}
+
+#[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Serialize, Deserialize)]
+pub struct NetworkParameters {
+    // TODO: Add testnet network parameters here.
+}
+
+impl NetworkParameters {
+    pub fn public_testnet_params() -> Self {
+        NetworkParameters {
+            // TODO: Add default public testnetb values here.
+        }
+    }
 }
 
 use zcash_primitives::consensus::{Network as ZcashPrimitivesNetwork, Parameters as _};
@@ -174,6 +187,11 @@ impl Network {
         super::NetworkUpgrade::Sapling
             .activation_height(self)
             .expect("Sapling activation height needs to be set")
+    }
+
+    /// Creates a Testnet with default values (Public Testnet)
+    pub fn default_testnet() -> Self {
+        Network::Testnet(Arc::new(NetworkParameters::public_testnet_params()))
     }
 }
 
