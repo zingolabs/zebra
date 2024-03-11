@@ -31,7 +31,7 @@ impl ParameterMagic for Network {
     fn magic_value(&self) -> Magic {
         match self {
             Network::Mainnet => magics::MAINNET,
-            Network::Testnet => magics::TESTNET,
+            Network::Testnet(_) => magics::TESTNET,
         }
     }
 }

@@ -271,7 +271,7 @@ impl Network {
         };
         match self {
             Mainnet => mainnet_heights,
-            Testnet => testnet_heights,
+            Testnet(_) => testnet_heights,
         }
         .iter()
         .cloned()
@@ -392,9 +392,11 @@ impl NetworkUpgrade {
         height: block::Height,
     ) -> Option<Duration> {
         match (network, height) {
-            (Network::Testnet, height) if height < TESTNET_MINIMUM_DIFFICULTY_START_HEIGHT => None,
+            (Network::Testnet(_), height) if height < TESTNET_MINIMUM_DIFFICULTY_START_HEIGHT => {
+                None
+            }
             (Network::Mainnet, _) => None,
-            (Network::Testnet, _) => {
+            (Network::Testnet(_), _) => {
                 let network_upgrade = NetworkUpgrade::current(network, height);
                 Some(network_upgrade.target_spacing() * TESTNET_MINIMUM_DIFFICULTY_GAP_MULTIPLIER)
             }

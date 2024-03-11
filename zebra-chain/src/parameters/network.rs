@@ -101,7 +101,7 @@ impl Network {
     pub fn is_max_block_time_enforced(self, height: block::Height) -> bool {
         match self {
             Network::Mainnet => true,
-            Network::Testnet => height >= super::TESTNET_MAX_TIME_START_HEIGHT,
+            Network::Testnet(_) => height >= super::TESTNET_MAX_TIME_START_HEIGHT,
         }
     }
 }
@@ -114,7 +114,7 @@ impl From<Network> for &'static str {
     fn from(network: Network) -> &'static str {
         match network {
             Network::Mainnet => "Mainnet",
-            Network::Testnet => "Testnet",
+            Network::Testnet(_) => "Testnet",
         }
     }
 }
@@ -142,7 +142,7 @@ impl Network {
     pub fn default_port(&self) -> u16 {
         match self {
             Network::Mainnet => 8233,
-            Network::Testnet => 18233,
+            Network::Testnet(_) => 18233,
         }
     }
 
@@ -169,7 +169,7 @@ impl Network {
     pub fn bip70_network_name(&self) -> String {
         match self {
             Network::Mainnet => "main".to_string(),
-            Network::Testnet => "test".to_string(),
+            Network::Testnet(_) => "test".to_string(),
         }
     }
 
@@ -191,7 +191,7 @@ impl Network {
     }
 
     /// Creates a Testnet with default values (Public Testnet)
-    pub fn default_testnet() -> Self {
+    pub fn public_testnet() -> Self {
         Network::Testnet(Arc::new(NetworkParameters::public_testnet_params()))
     }
 }
