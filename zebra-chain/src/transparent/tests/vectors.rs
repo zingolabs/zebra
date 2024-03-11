@@ -67,14 +67,14 @@ fn get_transparent_output_address() -> Result<()> {
     let addr = transparent_output_address(&transaction.outputs()[0], Network::Mainnet)
         .expect("should return address");
     assert_eq!(addr.to_string(), "t3M5FDmPfWNRG3HRLddbicsuSCvKuk9hxzZ");
-    let addr = transparent_output_address(&transaction.outputs()[0], Network::Testnet)
+    let addr = transparent_output_address(&transaction.outputs()[0], Network::public_testnet())
         .expect("should return address");
     assert_eq!(addr.to_string(), "t294SGSVoNq2daz15ZNbmAW65KQZ5e3nN5G");
     // Public key hash e4ff5512ffafe9287992a1cd177ca6e408e03003
     let addr = transparent_output_address(&transaction.outputs()[1], Network::Mainnet)
         .expect("should return address");
     assert_eq!(addr.to_string(), "t1ekRwsd4LaSsd6NXgsx66q2HxQWTLCF44y");
-    let addr = transparent_output_address(&transaction.outputs()[1], Network::Testnet)
+    let addr = transparent_output_address(&transaction.outputs()[1], Network::public_testnet())
         .expect("should return address");
     assert_eq!(addr.to_string(), "tmWbBGi7TjExNmLZyMcFpxVh3ZPbGrpbX3H");
 
@@ -86,7 +86,7 @@ fn get_transparent_output_address_with_blocks() {
     let _init_guard = zebra_test::init();
 
     get_transparent_output_address_with_blocks_for_network(Network::Mainnet);
-    get_transparent_output_address_with_blocks_for_network(Network::Testnet);
+    get_transparent_output_address_with_blocks_for_network(Network::public_testnet());
 }
 
 /// Test that the block test vector indexes match the heights in the block data,

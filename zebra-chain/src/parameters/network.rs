@@ -135,7 +135,7 @@ impl Network {
     /// Returns an iterator over [`Network`] variants.
     pub fn iter() -> impl Iterator<Item = Self> {
         // TODO: Use default values of `Testnet` variant when adding fields for #7845.
-        [Self::Mainnet, Self::Testnet].into_iter()
+        [Self::Mainnet, Self::public_testnet()].into_iter()
     }
 
     /// Get the default port associated to this network.
@@ -202,7 +202,7 @@ impl FromStr for Network {
     fn from_str(string: &str) -> Result<Self, Self::Err> {
         match string.to_lowercase().as_str() {
             "mainnet" => Ok(Network::Mainnet),
-            "testnet" => Ok(Network::Testnet),
+            "testnet" => Ok(Network::public_testnet()),
             _ => Err(InvalidNetworkError(string.to_owned())),
         }
     }
