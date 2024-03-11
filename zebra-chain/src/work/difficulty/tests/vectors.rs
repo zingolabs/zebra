@@ -455,7 +455,7 @@ fn check_testnet_minimum_difficulty_block(height: block::Height) -> Result<(), R
         // https://zips.z.cash/zip-0205#change-to-difficulty-adjustment-on-testnet
         // https://zips.z.cash/zip-0208#minimum-difficulty-blocks-on-testnet
         match NetworkUpgrade::minimum_difficulty_spacing_for_height(
-            Network::public_testnet(),
+            &Network::public_testnet(),
             height,
         ) {
             None => Err(eyre!("the minimum difficulty rule is not active"))?,
