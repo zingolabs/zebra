@@ -215,7 +215,7 @@ impl ParameterSubsidy for Network {
     fn num_funding_streams(&self) -> usize {
         match self {
             Network::Mainnet => FUNDING_STREAMS_NUM_ADDRESSES_MAINNET,
-            Network::Testnet(_) => FUNDING_STREAMS_NUM_ADDRESSES_TESTNET,
+            Network::Testnet => FUNDING_STREAMS_NUM_ADDRESSES_TESTNET,
         }
     }
     fn height_for_first_halving(&self) -> Height {
@@ -226,7 +226,7 @@ impl ParameterSubsidy for Network {
             Network::Mainnet => NetworkUpgrade::Canopy
                 .activation_height(self)
                 .expect("canopy activation height should be available"),
-            Network::Testnet(_) => FIRST_HALVING_TESTNET,
+            Network::Testnet => FIRST_HALVING_TESTNET,
         }
     }
 }

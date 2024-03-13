@@ -57,9 +57,7 @@ impl ParameterCheckpoint for Network {
             // zcash-cli getblockhash 0
             Network::Mainnet => "00040fe8ec8471911baa1db1266ea15dd06b4a8a5c453883c000b031973dce08",
             // zcash-cli -testnet getblockhash 0
-            Network::Testnet(_) => {
-                "05a60a92d99d85997cce3b87616c089f6124d7342af37106edc76126334a2c38"
-            }
+            Network::Testnet => "05a60a92d99d85997cce3b87616c089f6124d7342af37106edc76126334a2c38",
         }
         .parse()
         .expect("hard-coded hash parses")
@@ -71,7 +69,7 @@ impl ParameterCheckpoint for Network {
             Network::Mainnet => MAINNET_CHECKPOINTS
                 .parse()
                 .expect("Hard-coded Mainnet checkpoint list parses and validates"),
-            Network::Testnet(_) => TESTNET_CHECKPOINTS
+            Network::Testnet => TESTNET_CHECKPOINTS
                 .parse()
                 .expect("Hard-coded Testnet checkpoint list parses and validates"),
         };
@@ -124,11 +122,6 @@ impl FromStr for CheckpointList {
 }
 
 impl CheckpointList {
-    /// Returns the hard-coded checkpoint list for `network`.
-    pub fn new(network: Network) -> Self {
-        network.checkpoint_list()
-    }
-
     /// Create a new checkpoint list for `network` from `checkpoint_list`.
     ///
     /// Assumes that the provided genesis checkpoint is correct.
