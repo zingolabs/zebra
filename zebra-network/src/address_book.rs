@@ -598,7 +598,7 @@ impl AddressBook {
         self.by_addr
             .descending_values()
             .filter(move |peer| {
-                peer.is_ready_for_connection_attempt(instant_now, chrono_now, self.network)
+                peer.is_ready_for_connection_attempt(instant_now, chrono_now, self.network.clone())
                     && self.is_ready_for_connection_attempt_with_ip(&peer.addr.ip(), chrono_now)
             })
             .cloned()
@@ -630,7 +630,7 @@ impl AddressBook {
         self.by_addr
             .descending_values()
             .filter(move |peer| {
-                !peer.is_ready_for_connection_attempt(instant_now, chrono_now, self.network)
+                !peer.is_ready_for_connection_attempt(instant_now, chrono_now, self.network.clone())
             })
             .cloned()
     }

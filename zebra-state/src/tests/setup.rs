@@ -77,7 +77,7 @@ pub(crate) fn partial_nu5_chain_strategy(
                     false,
                 )
             })
-            .prop_map(move |partial_chain| (network, nu_activation, partial_chain))
+            .prop_map(move |partial_chain| (network.clone(), nu_activation, partial_chain))
         })
 }
 

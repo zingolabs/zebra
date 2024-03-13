@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 use zebra_chain::{
     amount::{self, Amount, NonNegative},
     block::Height,
-    parameters::Network::*,
+    parameters::Network::{self, *},
     serialization::{ZcashDeserializeInto, ZcashSerialize},
     transparent::{self, Address::*},
 };
@@ -504,8 +504,8 @@ fn address_variant(address: &transparent::Address) -> u8 {
     match (address.network(), address) {
         (Mainnet, PayToPublicKeyHash { .. }) => 0,
         (Mainnet, PayToScriptHash { .. }) => 1,
-        (Testnet, PayToPublicKeyHash { .. }) => 2,
-        (Testnet, PayToScriptHash { .. }) => 3,
+        (Testnet(_), PayToPublicKeyHash { .. }) => 2,
+        (Testnet(_), PayToScriptHash { .. }) => 3,
     }
 }
 
@@ -531,7 +531,7 @@ impl FromDisk for transparent::Address {
         let network = if address_variant < 2 {
             Mainnet
         } else {
-            Testnet
+            Network::public_testnet()
         };
 
         if address_variant % 2 == 0 {

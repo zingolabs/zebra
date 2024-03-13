@@ -103,16 +103,16 @@ impl Version {
         //       sync? zcashd accepts 170_002 or later during its initial sync.
         Version(match (network, network_upgrade) {
             (_, Genesis) | (_, BeforeOverwinter) => 170_002,
-            (Testnet, Overwinter) => 170_003,
+            (Testnet(_), Overwinter) => 170_003,
             (Mainnet, Overwinter) => 170_005,
             (_, Sapling) => 170_007,
-            (Testnet, Blossom) => 170_008,
+            (Testnet(_), Blossom) => 170_008,
             (Mainnet, Blossom) => 170_009,
-            (Testnet, Heartwood) => 170_010,
+            (Testnet(_), Heartwood) => 170_010,
             (Mainnet, Heartwood) => 170_011,
-            (Testnet, Canopy) => 170_012,
+            (Testnet(_), Canopy) => 170_012,
             (Mainnet, Canopy) => 170_013,
-            (Testnet, Nu5) => 170_050,
+            (Testnet(_), Nu5) => 170_050,
             (Mainnet, Nu5) => 170_100,
         })
     }
