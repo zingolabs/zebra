@@ -198,7 +198,12 @@ impl AddressBook {
         // The maximum number of addresses should be always greater than 0
         assert!(addr_limit > 0);
 
-        let mut new_book = AddressBook::new(local_listener, network, max_connections_per_ip, span);
+        let mut new_book = AddressBook::new(
+            local_listener,
+            network.clone(),
+            max_connections_per_ip,
+            span,
+        );
         new_book.addr_limit = addr_limit;
 
         let addrs = addrs
@@ -207,7 +212,7 @@ impl AddressBook {
                 meta_addr.addr = canonical_peer_addr(meta_addr.addr);
                 meta_addr
             })
-            .filter(|meta_addr| meta_addr.address_is_valid_for_outbound(network))
+            .filter(|meta_addr| meta_addr.address_is_valid_for_outbound(network.clone()))
             .map(|meta_addr| (meta_addr.addr, meta_addr));
 
         for (socket_addr, meta_addr) in addrs {
@@ -293,7 +298,7 @@ impl AddressBook {
         // Then sanitize and shuffle
         let mut peers: Vec<MetaAddr> = peers
             .descending_values()
-            .filter_map(|meta_addr| meta_addr.sanitize(self.network))
+            .filter_map(|meta_addr| meta_addr.sanitize(self.network.clone()))
             // # Security
             //
             // Remove peers that:
@@ -431,7 +436,7 @@ impl AddressBook {
         if let Some(updated) = updated {
             // Ignore invalid outbound addresses.
             // (Inbound connections can be monitored via Zebra's metrics.)
-            if !updated.address_is_valid_for_outbound(self.network) {
+            if !updated.address_is_valid_for_outbound(self.network.clone()) {
                 return None;
             }
 
@@ -440,7 +445,7 @@ impl AddressBook {
             //
             // Otherwise, if we got the info directly from the peer,
             // store it in the address book, so we know not to reconnect.
-            if !updated.last_known_info_is_valid_for_outbound(self.network)
+            if !updated.last_known_info_is_valid_for_outbound(self.network.clone())
                 && updated.last_connection_state.is_never_attempted()
             {
                 return None;
@@ -800,7 +805,7 @@ impl Clone for AddressBook {
         AddressBook {
             by_addr: self.by_addr.clone(),
             local_listener: self.local_listener,
-            network: self.network,
+            network: self.network.clone(),
             addr_limit: self.addr_limit,
             span: self.span.clone(),
             address_metrics_tx,

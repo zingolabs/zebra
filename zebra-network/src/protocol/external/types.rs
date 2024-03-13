@@ -54,7 +54,7 @@ impl Version {
     ///
     /// If we are incompatible with our own minimum remote protocol version.
     pub fn min_remote_for_height(
-        network: Network,
+        network: &Network,
         height: impl Into<Option<block::Height>>,
     ) -> Version {
         let height = height.into().unwrap_or(block::Height(0));
@@ -78,7 +78,7 @@ impl Version {
     /// - during the initial block download,
     /// - after Zebra restarts, and
     /// - after Zebra's local network is slow or shut down.
-    fn initial_min_for_network(network: Network) -> Version {
+    fn initial_min_for_network(network: &Network) -> Version {
         *constants::INITIAL_MIN_NETWORK_PROTOCOL_VERSION
             .get(&network)
             .expect("We always have a value for testnet or mainnet")
@@ -88,15 +88,15 @@ impl Version {
     /// `height`.
     ///
     /// This is the minimum peer version when Zebra is close to the current tip.
-    fn min_specified_for_height(network: Network, height: block::Height) -> Version {
+    fn min_specified_for_height(network: &Network, height: block::Height) -> Version {
         let network_upgrade = NetworkUpgrade::current(&network, height);
-        Version::min_specified_for_upgrade(network, network_upgrade)
+        Version::min_specified_for_upgrade(&network, network_upgrade)
     }
 
     /// Returns the minimum specified network protocol version for `network` and
     /// `network_upgrade`.
     pub(crate) fn min_specified_for_upgrade(
-        network: Network,
+        network: &Network,
         network_upgrade: NetworkUpgrade,
     ) -> Version {
         // TODO: Should we reject earlier protocol versions during our initial
@@ -210,15 +210,15 @@ mod test {
         let _init_guard = zebra_test::init();
 
         assert_eq!(
-            Version::min_specified_for_height(network, block::Height(0)),
-            Version::min_specified_for_upgrade(network, BeforeOverwinter),
+            Version::min_specified_for_height(&network, block::Height(0)),
+            Version::min_specified_for_upgrade(&network, BeforeOverwinter),
         );
 
         // We assume that the last version we know about continues forever
         // (even if we suspect that won't be true)
         assert_ne!(
-            Version::min_specified_for_height(network, block::Height::MAX),
-            Version::min_specified_for_upgrade(network, BeforeOverwinter),
+            Version::min_specified_for_height(&network, block::Height::MAX),
+            Version::min_specified_for_upgrade(&network, BeforeOverwinter),
         );
     }
 
@@ -253,8 +253,8 @@ mod test {
             let height = network_upgrade.activation_height(&network);
             if let Some(height) = height {
                 assert_eq!(
-                    Version::min_specified_for_upgrade(network, network_upgrade),
-                    Version::min_specified_for_height(network, height)
+                    Version::min_specified_for_upgrade(&network, network_upgrade),
+                    Version::min_specified_for_height(&network, height)
                 );
             }
         }

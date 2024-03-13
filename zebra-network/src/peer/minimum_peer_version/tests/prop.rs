@@ -16,7 +16,7 @@ proptest! {
 
         best_tip.send_best_tip_height(block_height);
 
-        let expected_minimum_version = Version::min_remote_for_height(network, block_height);
+        let expected_minimum_version = Version::min_remote_for_height(&network, block_height);
 
         prop_assert_eq!(minimum_peer_version.current(), expected_minimum_version);
     }
@@ -33,7 +33,7 @@ proptest! {
         for block_height in block_heights {
             best_tip.send_best_tip_height(block_height);
 
-            let expected_minimum_version = Version::min_remote_for_height(network, block_height);
+            let expected_minimum_version = Version::min_remote_for_height(&network, block_height);
 
             prop_assert_eq!(minimum_peer_version.current(), expected_minimum_version);
         }
@@ -48,7 +48,7 @@ proptest! {
         let (mut minimum_peer_version, best_tip) =
             MinimumPeerVersion::with_mock_chain_tip(network);
 
-        let mut current_minimum_version = Version::min_remote_for_height(network, None);
+        let mut current_minimum_version = Version::min_remote_for_height(&network, None);
         let mut expected_minimum_version = Some(current_minimum_version);
 
         prop_assert_eq!(minimum_peer_version.changed(), expected_minimum_version);
@@ -57,7 +57,7 @@ proptest! {
             if let Some(new_block_height) = update {
                 best_tip.send_best_tip_height(new_block_height);
 
-                let new_minimum_version = Version::min_remote_for_height(network, new_block_height);
+                let new_minimum_version = Version::min_remote_for_height&(network, new_block_height);
 
                 expected_minimum_version = if new_minimum_version != current_minimum_version {
                     Some(new_minimum_version)
