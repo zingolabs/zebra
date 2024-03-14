@@ -347,7 +347,7 @@ impl PeerSetGuard {
 
 /// A pair of block height values, where one is before and the other is at or after an arbitrary
 /// network upgrade's activation height.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct BlockHeightPairAcrossNetworkUpgrades {
     /// The network for which the block height values represent heights before and after an
     /// upgrade.
