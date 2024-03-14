@@ -384,12 +384,8 @@ async fn db_init_outside_future_executor() -> Result<()> {
     let start = Instant::now();
 
     // This test doesn't need UTXOs to be verified efficiently, because it uses an empty state.
-    let db_init_handle = zebra_state::spawn_init(
-        config.state.clone(),
-        &config.network.network,
-        Height::MAX,
-        0,
-    );
+    let db_init_handle =
+        zebra_state::spawn_init(config.state.clone(), config.network.network, Height::MAX, 0);
 
     // it's faster to panic if it takes longer than expected, since the executor
     // will wait indefinitely for blocking operation to finish once started

@@ -203,7 +203,7 @@ where
     /// `tower::Buffer` service.
     #[allow(dead_code)]
     pub fn new(
-        network: Network,
+        network: &Network,
         initial_tip: Option<(block::Height, block::Hash)>,
         state_service: S,
     ) -> Self {
@@ -232,7 +232,7 @@ where
     #[allow(dead_code)]
     pub(crate) fn from_list(
         list: impl IntoIterator<Item = (block::Height, block::Hash)>,
-        network: Network,
+        network: &Network,
         initial_tip: Option<(block::Height, block::Hash)>,
         state_service: S,
     ) -> Result<Self, VerifyCheckpointError> {
@@ -253,7 +253,7 @@ where
     /// hard-coded checkpoint lists. See that function for more details.
     pub(crate) fn from_checkpoint_list(
         checkpoint_list: CheckpointList,
-        network: Network,
+        network: &Network,
         initial_tip: Option<(block::Height, block::Hash)>,
         state_service: S,
     ) -> Self {
@@ -273,7 +273,7 @@ where
 
         let verifier = CheckpointVerifier {
             checkpoint_list,
-            network,
+            network: network.clone(),
             initial_tip_hash,
             state_service,
             queued: BTreeMap::new(),

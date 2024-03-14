@@ -73,9 +73,9 @@ where
     ZS::Future: Send + 'static,
 {
     /// Create a new transaction verifier.
-    pub fn new(network: Network, state: ZS) -> Self {
+    pub fn new(network: &Network, state: ZS) -> Self {
         Self {
-            network,
+            network: network.clone(),
             state: Timeout::new(state, UTXO_LOOKUP_TIMEOUT),
             script_verifier: script::Verifier,
         }

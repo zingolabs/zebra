@@ -46,7 +46,7 @@ fn test_database_format() {
     let _init_guard = zebra_test::init();
 
     test_database_format_with_network(Mainnet);
-    test_database_format_with_network(Testnet);
+    test_database_format_with_network(Network::public_testnet());
 }
 
 /// Snapshot raw and typed database formats for `network`.
@@ -56,7 +56,7 @@ fn test_database_format_with_network(network: Network) {
     let mut net_suffix = network.to_string();
     net_suffix.make_ascii_lowercase();
 
-    let mut storage = super::new_test_storage(&network);
+    let mut storage = super::new_test_storage(network);
 
     // Snapshot the column family names
     let mut cf_names = storage.db.list_cf().expect("empty database is valid");

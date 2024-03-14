@@ -108,9 +108,9 @@ where
     V::Future: Send + 'static,
 {
     /// Creates a new SemanticBlockVerifier
-    pub fn new(network: Network, state_service: S, transaction_verifier: V) -> Self {
+    pub fn new(network: &Network, state_service: S, transaction_verifier: V) -> Self {
         Self {
-            network,
+            network: network.clone(),
             state_service,
             transaction_verifier,
         }

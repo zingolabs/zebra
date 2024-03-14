@@ -46,7 +46,7 @@ pub fn block_no_transactions() -> Block {
 /// Return a new chain verifier and state service,
 /// using the hard-coded checkpoint list for `network`.
 async fn verifiers_from_network(
-    network: &Network,
+    network: Network,
 ) -> (
     impl Service<
             Request,
@@ -65,7 +65,7 @@ async fn verifiers_from_network(
         + Clone
         + 'static,
 ) {
-    let state_service = zs::init_test(network);
+    let state_service = zs::init_test(&network);
     let (
         block_verifier_router,
         _transaction_verifier,
@@ -172,7 +172,7 @@ async fn verify_checkpoint(config: Config) -> Result<(), Report> {
         _transaction_verifier,
         _groth16_download_handle,
         _max_checkpoint_height,
-    ) = super::init(config.clone(), network, zs::init_test(&network)).await;
+    ) = super::init(config.clone(), network.clone(), zs::init_test(&network)).await;
 
     // Add a timeout layer
     let block_verifier_router =
@@ -197,7 +197,7 @@ async fn verify_fail_no_coinbase_test() -> Result<(), Report> {
 async fn verify_fail_no_coinbase() -> Result<(), Report> {
     let _init_guard = zebra_test::init();
 
-    let (router, state_service) = verifiers_from_network(&Network::Mainnet).await;
+    let (router, state_service) = verifiers_from_network(Network::Mainnet).await;
 
     // Add a timeout layer
     let block_verifier_router =
@@ -222,7 +222,7 @@ async fn round_trip_checkpoint_test() -> Result<(), Report> {
 async fn round_trip_checkpoint() -> Result<(), Report> {
     let _init_guard = zebra_test::init();
 
-    let (block_verifier_router, state_service) = verifiers_from_network(&Network::Mainnet).await;
+    let (block_verifier_router, state_service) = verifiers_from_network(Network::Mainnet).await;
 
     // Add a timeout layer
     let block_verifier_router =
@@ -247,7 +247,7 @@ async fn verify_fail_add_block_checkpoint_test() -> Result<(), Report> {
 async fn verify_fail_add_block_checkpoint() -> Result<(), Report> {
     let _init_guard = zebra_test::init();
 
-    let (block_verifier_router, state_service) = verifiers_from_network(&Network::Mainnet).await;
+    let (block_verifier_router, state_service) = verifiers_from_network(Network::Mainnet).await;
 
     // Add a timeout layer
     let block_verifier_router =

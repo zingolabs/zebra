@@ -414,7 +414,7 @@ impl FinalizedState {
         let result = self.db.write_block(
             finalized,
             prev_note_commitment_trees,
-            self.network(),
+            &self.network(),
             source,
         );
 

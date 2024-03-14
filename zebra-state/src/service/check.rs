@@ -53,7 +53,7 @@ pub(crate) use difficulty::AdjustedDifficulty;
 #[tracing::instrument(skip(semantically_verified, finalized_tip_height, relevant_chain))]
 pub(crate) fn block_is_valid_for_recent_chain<C>(
     semantically_verified: &SemanticallyVerifiedBlock,
-    network: Network,
+    network: &Network,
     finalized_tip_height: Option<block::Height>,
     relevant_chain: C,
 ) -> Result<(), ValidateContextError>
@@ -308,7 +308,7 @@ fn difficulty_threshold_and_time_are_valid(
 pub(crate) fn legacy_chain<I>(
     nu5_activation_height: block::Height,
     ancestors: I,
-    network: Network,
+    network: &Network,
     max_legacy_chain_blocks: usize,
 ) -> Result<(), BoxError>
 where
@@ -384,7 +384,7 @@ pub(crate) fn initial_contextual_validity(
     // Security: check proof of work before any other checks
     check::block_is_valid_for_recent_chain(
         semantically_verified,
-        non_finalized_state.network,
+        &non_finalized_state.network,
         finalized_state.finalized_tip_height(),
         relevant_chain,
     )?;

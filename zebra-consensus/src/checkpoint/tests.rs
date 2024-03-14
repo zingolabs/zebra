@@ -47,7 +47,7 @@ async fn single_item_checkpoint_list() -> Result<(), Report> {
 
     let state_service = zebra_state::init_test(&Mainnet);
     let mut checkpoint_verifier =
-        CheckpointVerifier::from_list(genesis_checkpoint_list, Mainnet, None, state_service)
+        CheckpointVerifier::from_list(genesis_checkpoint_list, &Mainnet, None, state_service)
             .map_err(|e| eyre!(e))?;
 
     assert_eq!(
@@ -126,7 +126,7 @@ async fn multi_item_checkpoint_list() -> Result<(), Report> {
 
     let state_service = zebra_state::init_test(&Mainnet);
     let mut checkpoint_verifier =
-        CheckpointVerifier::from_list(checkpoint_list, Mainnet, None, state_service)
+        CheckpointVerifier::from_list(checkpoint_list, &Mainnet, None, state_service)
             .map_err(|e| eyre!(e))?;
 
     assert_eq!(
@@ -206,7 +206,7 @@ async fn multi_item_checkpoint_list() -> Result<(), Report> {
 #[tokio::test(flavor = "multi_thread")]
 async fn continuous_blockchain_no_restart() -> Result<(), Report> {
     continuous_blockchain(None, Mainnet).await?;
-    continuous_blockchain(None, Testnet).await?;
+    continuous_blockchain(None, Network::public_testnet()).await?;
     Ok(())
 }
 
@@ -216,7 +216,11 @@ async fn continuous_blockchain_restart() -> Result<(), Report> {
         continuous_blockchain(Some(block::Height(height.try_into().unwrap())), Mainnet).await?;
     }
     for height in 0..zebra_test::vectors::CONTINUOUS_TESTNET_BLOCKS.len() {
-        continuous_blockchain(Some(block::Height(height.try_into().unwrap())), Testnet).await?;
+        continuous_blockchain(
+            Some(block::Height(height.try_into().unwrap())),
+            Network::public_testnet(),
+        )
+        .await?;
     }
     Ok(())
 }
@@ -271,7 +275,7 @@ async fn continuous_blockchain(
         let state_service = zebra_state::init_test(&Mainnet);
         let mut checkpoint_verifier = CheckpointVerifier::from_list(
             checkpoint_list,
-            network,
+            &network,
             initial_tip,
             state_service.clone(),
         )
@@ -439,7 +443,7 @@ async fn block_higher_than_max_checkpoint_fail() -> Result<(), Report> {
 
     let state_service = zebra_state::init_test(&Mainnet);
     let mut checkpoint_verifier =
-        CheckpointVerifier::from_list(genesis_checkpoint_list, Mainnet, None, state_service)
+        CheckpointVerifier::from_list(genesis_checkpoint_list, &Mainnet, None, state_service)
             .map_err(|e| eyre!(e))?;
 
     assert_eq!(
@@ -513,7 +517,7 @@ async fn wrong_checkpoint_hash_fail() -> Result<(), Report> {
 
     let state_service = zebra_state::init_test(&Mainnet);
     let mut checkpoint_verifier =
-        CheckpointVerifier::from_list(genesis_checkpoint_list, Mainnet, None, state_service)
+        CheckpointVerifier::from_list(genesis_checkpoint_list, &Mainnet, None, state_service)
             .map_err(|e| eyre!(e))?;
 
     assert_eq!(
@@ -686,7 +690,7 @@ async fn checkpoint_drop_cancel() -> Result<(), Report> {
 
     let state_service = zebra_state::init_test(&Mainnet);
     let mut checkpoint_verifier =
-        CheckpointVerifier::from_list(checkpoint_list, Mainnet, None, state_service)
+        CheckpointVerifier::from_list(checkpoint_list, &Mainnet, None, state_service)
             .map_err(|e| eyre!(e))?;
 
     assert_eq!(
@@ -769,7 +773,7 @@ async fn hard_coded_mainnet() -> Result<(), Report> {
 
     let state_service = zebra_state::init_test(&Mainnet);
     // Use the hard-coded checkpoint list
-    let mut checkpoint_verifier = CheckpointVerifier::new(Network::Mainnet, None, state_service);
+    let mut checkpoint_verifier = CheckpointVerifier::new(&Network::Mainnet, None, state_service);
 
     assert_eq!(
         checkpoint_verifier.previous_checkpoint_height(),
