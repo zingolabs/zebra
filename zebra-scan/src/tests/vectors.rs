@@ -93,7 +93,7 @@ async fn scanning_zecpages_from_populated_zebra_state() -> Result<()> {
 
     // Create a populated state service.
     let (_state_service, read_only_state_service, latest_chain_tip, _chain_tip_change) =
-        zebra_state::populated_state(blocks.clone(), network).await;
+        zebra_state::populated_state(blocks.clone(), &network).await;
 
     let db = read_only_state_service.db();
 
@@ -156,7 +156,7 @@ fn scanning_fake_blocks_store_key_and_results() -> Result<()> {
     let key_to_be_stored = encode_extended_full_viewing_key("zxviews", &efvk);
 
     // Create a database
-    let mut storage = new_test_storage(network);
+    let mut storage = new_test_storage(&network);
 
     // Insert the generated key to the database
     storage.add_sapling_key(&key_to_be_stored, None);

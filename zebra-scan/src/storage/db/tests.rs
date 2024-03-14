@@ -24,7 +24,7 @@ mod vectors;
 
 /// Returns an empty `Storage` suitable for testing.
 pub fn new_test_storage(network: Network) -> Storage {
-    Storage::new(&Config::ephemeral(), network, false)
+    Storage::new(&Config::ephemeral(), &network, false)
 }
 
 /// Add fake keys to `storage` for testing purposes.
@@ -41,7 +41,7 @@ pub fn add_fake_keys(storage: &mut Storage) {
 /// If it is `false`, adds the transaction hashes from `height`.
 pub fn add_fake_results(
     storage: &mut Storage,
-    network: Network,
+    network: &Network,
     height: Height,
     add_progress_marker: bool,
 ) {

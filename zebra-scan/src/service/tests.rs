@@ -19,7 +19,7 @@ use crate::{
 /// Tests that keys are deleted correctly
 #[tokio::test]
 pub async fn scan_service_deletes_keys_correctly() -> Result<()> {
-    let mut db = new_test_storage(Network::Mainnet);
+    let mut db = new_test_storage(&Network::Mainnet);
 
     let zec_pages_sapling_efvk = ZECPAGES_SAPLING_VIEWING_KEY.to_string();
 
@@ -82,7 +82,7 @@ pub async fn scan_service_deletes_keys_correctly() -> Result<()> {
 /// Tests that keys are deleted correctly
 #[tokio::test]
 pub async fn scan_service_subscribes_to_results_correctly() -> Result<()> {
-    let db = new_test_storage(Network::Mainnet);
+    let db = new_test_storage(&Network::Mainnet);
 
     let (mut scan_service, mut cmd_receiver) = ScanService::new_with_mock_scanner(db);
 
@@ -129,7 +129,7 @@ pub async fn scan_service_subscribes_to_results_correctly() -> Result<()> {
 /// Tests that results are cleared are deleted correctly
 #[tokio::test]
 pub async fn scan_service_clears_results_correctly() -> Result<()> {
-    let mut db = new_test_storage(Network::Mainnet);
+    let mut db = new_test_storage(&Network::Mainnet);
 
     let zec_pages_sapling_efvk = ZECPAGES_SAPLING_VIEWING_KEY.to_string();
 
@@ -184,7 +184,7 @@ pub async fn scan_service_clears_results_correctly() -> Result<()> {
 /// Tests that results for key are returned correctly
 #[tokio::test]
 pub async fn scan_service_get_results_for_key_correctly() -> Result<()> {
-    let mut db = new_test_storage(Network::Mainnet);
+    let mut db = new_test_storage(&Network::Mainnet);
 
     let zec_pages_sapling_efvk = ZECPAGES_SAPLING_VIEWING_KEY.to_string();
 
@@ -269,12 +269,12 @@ pub async fn scan_service_registers_keys_correctly() -> Result<()> {
 
 async fn scan_service_registers_keys_correctly_for(network: Network) -> Result<()> {
     // Mock the state.
-    let (state, _, _, chain_tip_change) = zebra_state::populated_state(vec![], network).await;
+    let (state, _, _, chain_tip_change) = zebra_state::populated_state(vec![], &network).await;
 
     // Instantiate the scan service.
     let mut scan_service = ServiceBuilder::new()
         .buffer(2)
-        .service(ScanService::new(&Config::ephemeral(), network, state, chain_tip_change).await);
+        .service(ScanService::new(&Config::ephemeral(), &network, state, chain_tip_change).await);
 
     // Mock three Sapling keys.
     let mocked_keys = mock_sapling_scanning_keys(3, network);

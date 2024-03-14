@@ -94,14 +94,14 @@ pub(crate) fn new_state_with_mainnet_genesis(
 
     let mut finalized_state = FinalizedState::new_with_debug(
         &config,
-        network,
+        &network,
         // The tests that use this setup function also commit invalid blocks to the state.
         true,
         #[cfg(feature = "elasticsearch")]
         None,
         false,
     );
-    let non_finalized_state = NonFinalizedState::new(network);
+    let non_finalized_state = NonFinalizedState::new(&network);
 
     assert_eq!(
         None,

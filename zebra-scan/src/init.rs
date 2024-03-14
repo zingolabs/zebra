@@ -18,7 +18,7 @@ use crate::{scan, service::ScanService, storage::Storage, Config};
 pub async fn init_with_server(
     listen_addr: SocketAddr,
     config: Config,
-    network: Network,
+    network: &Network,
     state: scan::State,
     chain_tip_change: ChainTipChange,
 ) -> Result<(), Report> {
@@ -39,7 +39,7 @@ pub async fn init_with_server(
 /// Initialize the scanner and its gRPC server based on its config, and spawn a task for it.
 pub fn spawn_init(
     config: Config,
-    network: Network,
+    network: &Network,
     state: scan::State,
     chain_tip_change: ChainTipChange,
 ) -> JoinHandle<Result<(), Report>> {

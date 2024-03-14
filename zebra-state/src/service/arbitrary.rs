@@ -193,7 +193,7 @@ impl Strategy for PreparedChain {
 /// - a [`ChainTipChange`] tracker
 pub async fn populated_state(
     blocks: impl IntoIterator<Item = Arc<Block>>,
-    network: Network,
+    network: &Network,
 ) -> (
     Buffer<BoxService<Request, Response, BoxError>, Request>,
     ReadStateService,

@@ -83,7 +83,7 @@ fn test_block_db_round_trip_with(
         &Config::ephemeral(),
         STATE_DATABASE_KIND,
         &state_database_format_version_in_code(),
-        network,
+        &network,
         // The raw database accesses in this test create invalid database formats.
         true,
         STATE_COLUMN_FAMILIES_IN_CODE

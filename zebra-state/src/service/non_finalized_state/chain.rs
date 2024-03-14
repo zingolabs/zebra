@@ -211,7 +211,7 @@ pub struct ChainInner {
 impl Chain {
     /// Create a new Chain with the given finalized tip trees and network.
     pub(crate) fn new(
-        network: Network,
+        network: &Network,
         finalized_tip_height: Height,
         sprout_note_commitment_tree: Arc<sprout::tree::NoteCommitmentTree>,
         sapling_note_commitment_tree: Arc<sapling::tree::NoteCommitmentTree>,
@@ -247,7 +247,7 @@ impl Chain {
         };
 
         let mut chain = Self {
-            network,
+            network: network.clone(),
             inner,
             last_fork_height: None,
         };
@@ -373,7 +373,7 @@ impl Chain {
 
     /// Returns the [`Network`] for this chain.
     pub fn network(&self) -> Network {
-        self.network
+        self.network.clone()
     }
 
     /// Returns the [`ContextuallyVerifiedBlock`] with [`block::Hash`] or
@@ -1270,7 +1270,6 @@ impl Chain {
     ) -> impl Iterator<Item = &TransparentTransfers> {
         addresses
             .iter()
-            .copied()
             .flat_map(|address| self.partial_transparent_transfers.get(&address))
     }
 

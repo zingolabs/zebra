@@ -38,7 +38,7 @@ impl ScanService {
     /// Create a new [`ScanService`].
     pub async fn new(
         config: &Config,
-        network: Network,
+        network: &Network,
         state: scan::State,
         chain_tip_change: ChainTipChange,
     ) -> Self {
